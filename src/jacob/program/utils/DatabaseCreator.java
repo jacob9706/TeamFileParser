@@ -24,6 +24,7 @@ public class DatabaseCreator {
 		"tab6.sqlite"
 	};
 	
+	
 	String outputDirectory;
 	
 	List<Input> data;
