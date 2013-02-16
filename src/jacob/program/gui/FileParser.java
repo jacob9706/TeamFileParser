@@ -13,14 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JButton;
+import javax.swing.JButton;	
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import org.tmatesoft.sqljet.core.SqlJetException;
 
 public class FileParser extends JFrame {
 	
@@ -43,7 +41,8 @@ public class FileParser extends JFrame {
 	
 	private JTextField
 	inputFileField = new JTextField(),
-	outputFolderField = new JTextField();
+	outputFolderField = new JTextField(),
+	outputMessageField = new JTextField();
 	
 	public FileParser() {
 		JPanel buttonPanel = new JPanel();
@@ -64,10 +63,13 @@ public class FileParser extends JFrame {
 		outputFolderField.setEditable(false);
 		outputFolderField.setText("Select An Output Folder");
 		
+		outputMessageField.setEditable(false);
+		
 		Container container = getContentPane();
 		container.add(buttonPanel, BorderLayout.NORTH);
-		container.add(outputFolderField);
-		container.add(inputFileField, BorderLayout.SOUTH);
+		container.add(outputFolderField, BorderLayout.LINE_END);
+		container.add(inputFileField, BorderLayout.LINE_START);
+		container.add(outputMessageField, BorderLayout.SOUTH);
 	}
 	
 	private class OpenListener implements ActionListener {
@@ -111,12 +113,23 @@ public class FileParser extends JFrame {
 				showPopUpMessage("No Mathces Found!");
 				return;
 			}
-			DatabaseCreator dbc = new DatabaseCreator(directory, parsedData);
+			DatabaseCreator dbc = null;
 			try {
-				dbc.execute();
-			} catch (SqlJetException e) {
-				showPopUpMessage("Creation Failed... Something went wrong");
+				dbc = new DatabaseCreator(directory, parsedData);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			outputMessageField.setText("...Processing...");
+			
+			if (dbc.execute()) {
+				outputMessageField.setText("Creation Successful");
+			}
+			else {
+				outputMessageField.setText("Creation Failed");
+			}
+			
 		}
 		
 	}
