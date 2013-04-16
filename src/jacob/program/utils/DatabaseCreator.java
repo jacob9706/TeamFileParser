@@ -79,7 +79,7 @@ public class DatabaseCreator {
 					}
 					
 					// Insert data
-					for (int j = i; j < data.size(); j+= outputFiles.length) {
+					for (int j = i; j < data.size(); j+= 6) {
 						Input info = data.get(j);
 						String query = "INSERT INTO " + TABLE_NAME + " VALUES('" + 
 								info.getMatchNumber() + "', '" +
